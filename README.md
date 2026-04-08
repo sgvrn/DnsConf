@@ -3,7 +3,7 @@
 # DNS Block&Redirect Configurer
 **Allows to set Redirect and Block rules to your Cloudflare and NextDNS accounts.**
 
-**Ready-to-run via GitHub Actions.** [Video guide](#step-by-step-video-guide-redirect-for-nextdns)
+**Ready-to-run via GitHub Actions.** [Video guide](https://www.youtube.com/watch?v=vbAXM_xAL5I)
 
 [General comparison: Cloudflare vs NextDNS](#cloudflare-vs-nextdns)
 
@@ -15,7 +15,11 @@
 
 [Setup data sources](#setup-data-sources)
 
+[Setup exclude redirects (optional)](#setup-exclude-redirects-optional)
+
 [GitHub Actions](#github-actions-setup)
+
+---
 
 ## Cloudflare vs NextDNS
 
@@ -54,9 +58,12 @@ Set **Account ID** to **environment variable** `CLIENT_ID`
 2) Click on **NextDNS** logo. On the opened page, copy ID from Endpoints section.
    Set it as **environment variable** `CLIENT_ID`
 
+---
 
 ## Setup profile
 Set **environment variable** `DNS` with DNS provider name (**Cloudflare** or **NextDNS**)
+
+---
 
 ## Setup data sources
 Each data source must be a link to a hosts file, e.g. https://raw.githubusercontent.com/Internet-Helper/GeoHideDNS/refs/heads/main/hosts/hosts
@@ -97,6 +104,18 @@ will keep only `domain.to.block` and `another.to.block` for the further block pr
 + You may want to provide the same source for both `BLOCK` and `REDIRECT` for **Cloudflare**.
 + For **NextDNS**, the best option might be to set `REDIRECT` only, and then manually choose any blocklists at the _Privacy_ tab.
 
+---
+
+## Setup exclude redirects (optional)
+
+Put domains to **environment variable** `EXCLUDE_REDIRECT` separated by coma, e.g. `instagram.com,twitch.com`
+
+These domains and their subdomains:
+- will be removed from existing redirect rules;
+- won't be added with new ones.
+
+---
+
 ## Script Behaviour
 ### Cloudflare
 Previously generated data will be removed. Script recognizes old data by marks:
@@ -123,6 +142,8 @@ For `BLOCK`:
 + The rest block settings are kept untouched
 
 Previously generated data is removed **ONLY** when both `BLOCK` and `REDIRECT` sources were not provided.
+
+---
 
 ## GitHub Actions setup
 

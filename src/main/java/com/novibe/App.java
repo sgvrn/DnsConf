@@ -22,7 +22,7 @@ public class App {
             case "NEXTDNS" -> "com.novibe.dns.next_dns";
             default -> {
                 Log.fail(
-                "Unsupported DNS provider! Must be CLOUDFLARE or NEXTDNS. Was: " + provider);
+                        "Unsupported DNS provider! Must be CLOUDFLARE or NEXTDNS. Was: " + provider);
                 System.exit(1);
                 yield null;
             }

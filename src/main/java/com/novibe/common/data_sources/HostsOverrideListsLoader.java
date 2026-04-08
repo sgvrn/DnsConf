@@ -1,5 +1,6 @@
 package com.novibe.common.data_sources;
 
+import com.novibe.common.util.DataParser;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Predicate;
@@ -24,7 +25,7 @@ public class HostsOverrideListsLoader extends ListLoader<HostsOverrideListsLoade
     protected BypassRoute toObject(String line) {
         int delimiter = line.indexOf(" ");
         String ip = line.substring(0, delimiter++);
-        String website = removeWWW(line.substring(delimiter).strip());
+        String website = DataParser.removeWWW(line.substring(delimiter).strip());
         return new BypassRoute(ip, website);
     }
 
