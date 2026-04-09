@@ -1,10 +1,7 @@
 package com.novibe.dns.next_dns.http;
 
 import com.novibe.common.HttpRequestSender;
-import com.novibe.common.util.Log;
-
-import static com.novibe.common.config.EnvironmentVariables.AUTH_SECRET;
-import static com.novibe.common.config.EnvironmentVariables.CLIENT_ID;
+import com.novibe.common.exception.ProcessException;
 
 public abstract class AbstractNextDnsHttpClient extends HttpRequestSender {
 
@@ -12,7 +9,7 @@ public abstract class AbstractNextDnsHttpClient extends HttpRequestSender {
 
     @Override
     protected String apiUrl() {
-        return "https://api.nextdns.io/profiles/%s".formatted(CLIENT_ID);
+        return "https://api.nextdns.io/profiles/%s".formatted(dnsProfile.clientId());
     }
 
     @Override
@@ -22,16 +19,16 @@ public abstract class AbstractNextDnsHttpClient extends HttpRequestSender {
 
     @Override
     protected String authHeaderValue() {
-        return AUTH_SECRET;
+        return dnsProfile.authSecret();
     }
 
     @Override
     protected final void react401() {
-        Log.fail("Invalid api key!");
+        throw new ProcessException("Invalid api key");
     }
 
     @Override
     protected void react403() {
-        Log.fail("Invalid api key!");
+        throw new ProcessException("Invalid api key!");
     }
 }

@@ -1,7 +1,6 @@
 package com.novibe.dns.next_dns;
 
 import com.novibe.common.DnsTaskRunner;
-import com.novibe.common.data_sources.HostsBlockListsLoader;
 import com.novibe.common.data_sources.HostsOverrideListsLoader;
 import com.novibe.common.util.EnvParser;
 import com.novibe.common.util.Log;
@@ -19,24 +18,24 @@ import static com.novibe.common.config.EnvironmentVariables.REDIRECT;
 
 @Service
 @RequiredArgsConstructor
-public class NextDnsTaskRunner implements DnsTaskRunner {
+public class NextDnsTaskRunner extends DnsTaskRunner {
 
-    private final HostsBlockListsLoader blockListsLoader;
-    private final HostsOverrideListsLoader overrideListsLoader;
     private final NextDnsRewriteService nextDnsRewriteService;
     private final NextDnsDenyService nextDnsDenyService;
 
     @Override
-    public void run() {
-
-        Log.global("NextDNS");
+    public void greetingMessage() {
+        Log.global("Setting up Profile " + dnsProfile.number() + " (NextDNS)");
         Log.common("""
                 Script behaviour: old BLOCK/REDIRECT settings are about to be updated via provided BLOCK/REDIRECT sources.
                 - if no sources provided, then all NextDNS settings will be removed.
                 - if provided only one type of sources, related settings will be updated; another type remain untouched.
                 - if EXCLUDE_REDIRECT domains provided, they will affect both existing and new redirect rules.
                 NextDNS api rate limiter reset config: 60 seconds after the last request""");
+    }
 
+    @Override
+    protected void process() {
         List<String> blockSources = EnvParser.parse(BLOCK);
         if (!blockSources.isEmpty()) {
             Log.step("Obtain block lists from %s sources".formatted(blockSources.size()));
@@ -71,8 +70,10 @@ public class NextDnsTaskRunner implements DnsTaskRunner {
             nextDnsDenyService.removeAll();
             nextDnsRewriteService.removeAll();
         }
-
-        Log.global("FINISHED");
     }
 
+    @Override
+    protected void finishMessage() {
+        Log.global("Profile " + dnsProfile.number() + " (NextDNS) set up successfully");
+    }
 }

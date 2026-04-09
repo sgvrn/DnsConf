@@ -17,6 +17,8 @@
 
 [Setup exclude redirects (optional)](#setup-exclude-redirects-optional)
 
+[Multiple profiles setup](#multiple-profiles-setup)
+
 [GitHub Actions](#github-actions-setup)
 
 ---
@@ -113,6 +115,29 @@ Put domains to **environment variable** `EXCLUDE_REDIRECT` separated by coma, e.
 These domains and their subdomains:
 - will be removed from existing redirect rules;
 - won't be added with new ones.
+
+---
+
+## Multiple profiles setup
+
+### Restrictions
+All profiles get _similar_ settings. That means `BLOCK`, `REDIRECT` and `EXCLUDE_REDIRECT` are **shared**.
+
+### Multiple profiles of single provider
+
+Put your profiles separated by coma **without whitespace** into related **environment variables**.
+E.g., two NextDNS profiles must be set as shown:
+
+- `AUTH_SECRET` has: `secret_NextDns_1,secret_NextDns_2`
+- `CLIENT_ID` has `client_id_NextDns_1,client_id_NextDns_2`
+
+### Multiple profiles of different providers
+
+In addition to setting above, list provider for each profile in **environment variable** `DNS`. For example:
+
+- `DNS` has: `NEXTDNS,CLOUDFLARE,NEXTDNS`
+- `AUTH_SECRET` has: `secret_NextDns_1,secret_Cloudflare_1,secret_NextDns_2`
+- `CLIENT_ID` has `client_id_NextDns_1,client_id_Cloudflare_1,client_id_NextDns_2`
 
 ---
 
